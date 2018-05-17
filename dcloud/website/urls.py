@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from website import views
+from website import views, auth_views
 
 urlpatterns = [
     # blog
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/publish/$', views.post_publish, name='post_publish'),
 
     url(r'^files/', views.file_list, name='file_list'),
+    url(r'^signup/$', auth_views.signup, name='signup'),
 ]

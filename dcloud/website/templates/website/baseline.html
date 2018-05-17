@@ -1,0 +1,22 @@
+<html>
+    <header>
+        <title>D.cloud</title>
+    </header>
+    <body>
+        <div class="page-header">
+            {% if user.is_authenticated %}
+                <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+            {% else %}
+                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+            {% endif %}
+            <h1><a href="/">D.cloud</a></h1>
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="page-footer">
+            
+        </div>
+    </body>
+</html>

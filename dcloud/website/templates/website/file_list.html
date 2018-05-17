@@ -1,1 +1,8 @@
-{{files}}
+{% extends 'website/baseline.html' %}
+
+{% block content %}
+    {% for file in files %}
+        <h1>{{file.title}}</h1>
+        <p>{{file.object_key}}</p>
+    {% endfor %}
+{% endblock %}
