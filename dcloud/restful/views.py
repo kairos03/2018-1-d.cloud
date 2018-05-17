@@ -1,12 +1,12 @@
-from restful.models import File  
-from restful.serializers import FileSerializer  
-from django.http import Http404  
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status
 
+from restful.models import File  
+from restful.serializers import FileSerializer  
 
-# Create your views here.
 class FileList(APIView):
     """
     List all file, or create a new snippet.
