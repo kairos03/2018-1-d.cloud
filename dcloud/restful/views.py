@@ -4,6 +4,7 @@ from django.http import Http404
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status
+from restful import s3_interface
 
 
 # Create your views here.
@@ -12,10 +13,14 @@ class FileList(APIView):
     List all file, or create a new snippet.
     """
 
-    def get(self, request, format=None):
-        file = File.objects.all()
-        serializer = FileSerializer(file, many=True)
-        return Response(serializer.data)
+    def get(self, request, path='/', format=None):
+        # file = File.objects.all()
+        # serializer = FileSerializer(file, many=True)
+        # print(serializer.data)
+        # return Response(serializer.data)
+        data = s3_interface.list_path(s3_interface.BUCKET, 'test1', path)
+        return Response(data)
+
 
     def post(self, request, format=None):
         serializer = FileSerializer(data=request.data)
