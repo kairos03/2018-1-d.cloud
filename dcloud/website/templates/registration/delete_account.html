@@ -1,0 +1,12 @@
+{% extends "website/baseline.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1> {{user.username}} really want to delete your account? </h1>
+<form action='#' method="POST">
+        {% csrf_token %}
+    <input type="submit" value="yes" name="yes"> 
+    <input type="submit" value="no" name="no"> 
+</form>
+{% endif %}
+{% endblock %}
