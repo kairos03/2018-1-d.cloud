@@ -19,4 +19,5 @@ from django.conf.urls import url, include
 urlpatterns = [
     url('admin/', admin.site.urls),
     url(r'^restapi/', include('restful.urls')),
+    # url(r'^$', include('website.urls')),
 ]
