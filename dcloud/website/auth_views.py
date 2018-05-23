@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -32,5 +32,6 @@ def delete_account(request):
 def delete_account_success(request):
     if request.method == 'GET':
         # TODO Add delete account
+        logout(request)
         return render(request, 'registration/delete_account_success.html')
 
