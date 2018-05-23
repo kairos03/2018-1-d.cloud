@@ -23,7 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '534f6m=i@*)=q3kuwlge1m3c+@^cabr3ttcx*omv^+dorydjfr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# TODO
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -107,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko_kr'
 
 TIME_ZONE = 'UTC'
 
