@@ -11,4 +11,5 @@ urlpatterns = [
     # blog
     url(r'^$', views.home),
     url(r'^files/', views.file_list, name='file_list'),
+    url(r'^upload/', views.upload.as_view(), name='upload')
 ]

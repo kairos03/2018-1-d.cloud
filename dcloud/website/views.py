@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect, Http404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.views.generic import FormView
+from website.forms import S3DirectUploadForm
 from restful.models import File
 import requests
 
@@ -14,3 +16,8 @@ def file_list(request):
     files = requests.get('http://localhost:8000/restapi/files')
     files = files.json()
     return render(request, 'website/file_list.html', files)
+
+
+class upload(FormView):
+    template_name = 'website/s3direct.html'
+    form_class = S3DirectUploadForm
