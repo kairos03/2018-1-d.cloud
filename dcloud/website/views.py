@@ -13,11 +13,6 @@ def home(request):
 
 @login_required
 def file_list(request):
-    files = requests.get('http://localhost:8000/restapi/files')
+    files = requests.get('http://localhost:8000/restapi/list')
     files = files.json()
     return render(request, 'website/file_list.html', files)
-
-
-class upload(FormView):
-    template_name = 'website/s3direct.html'
-    form_class = S3DirectUploadForm

@@ -13,21 +13,14 @@ class FileList(APIView):
     List all file, or create a new snippet.
     """
 
-    def get(self, request, path='/', format=None):
-        # file = File.objects.all()
-        # serializer = FileSerializer(file, many=True)
-        # print(serializer.data)
-        # return Response(serializer.data)
+    def get(self, request, path="/", format=None):
         data = s3_interface.list_path(s3_interface.BUCKET, 'test1', path)
         return Response(data)
 
 
-    def post(self, request, format=None):
-        serializer = FileSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, path="/", format=None):
+        # TODO file upload
+        return Response({})
 
 
 class FileDetail(APIView):
