@@ -27,4 +27,5 @@ def list_path(bucket, user, path):
 
     return {'files':files}
 
-# print(list_path(BUCKET, 'test1', ''))
+def delete_path(bucket, user, path):
+    return S3.delete_object(Bucket=bucket, Key='{}/{}'.format(user, path))

@@ -34,27 +34,30 @@ class FileDetail(APIView):
     """
     Retrieve, update or delete a file instance.
     """
-    def get_object(self, pk):
-        try:
-            return File.objects.get(pk=pk)
-        except File.DoesNotExist:
-            raise Http404
+    # def get_object(self, pk):
+    #     try:
+    #         return File.objects.get(pk=pk)
+    #     except File.DoesNotExist:
+    #         raise Http404
 
-    def get(self, request, pk, format=None):
-        file = self.get_object(pk)
-        serializer = FileSerializer(file)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, path="/", format=None):
+        # file = self.get_object(pk)
+        # serializer = FileSerializer(file)
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+        # TODO
+        return
 
-    def put(self, request, pk, format=None):
-        file = self.get_object(pk)
-        serializer = FileSerializer(file, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, path="/", format=None):
+        # file = self.get_object(pk)
+        # serializer = FileSerializer(file, data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # TODO
+        return
 
-    def delete(self, request, pk, format=None):
-        file = self.get_object(pk)
-        file.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, path="/", format=None):
+        result = s3_interface.delete_path(s3_interface.BUCKET, 'test1', path)
+        return Response(result)
 
