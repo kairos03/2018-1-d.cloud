@@ -7,4 +7,4 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = ('created', 'updated', 'object_key')
+        fields = ('file', 'created')

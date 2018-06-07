@@ -13,48 +13,74 @@ class FileList(APIView):
     List all file, or create a new snippet.
     """
 
-    def get(self, request, path='/', format=None):
-        # file = File.objects.all()
-        # serializer = FileSerializer(file, many=True)
-        # print(serializer.data)
-        # return Response(serializer.data)
-        data = s3_interface.list_path(s3_interface.BUCKET, 'test1', path)
+    """
+    list files or view detail
+    """
+    def get(self, request, path="/", format=None):
+        user = request.user
+        data = s3_interface.list_path(s3_interface.BUCKET, user.username, path)
         return Response(data)
 
-
-    def post(self, request, format=None):
-        serializer = FileSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    """
+    upload file
+    """
+    def post(self, request, path="/", format=None):
+        # file upload
+        # upload to server
+        file_serializer = FileSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            # upload to s3
+            file_path = '.' + file_serializer.data.get('file')
+            user = request.user
+            data = s3_interface.upload_file(s3_interface.BUCKET, user.username, file_path, path+file_path.split('/')[-1])
+            # TODO upload check
+            # TODO remove local file
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    """
+    make directory
+    """
+    def put(self, request, path="/", format=None):
+        user = request.user
+        data = s3_interface.make_directory(s3_interface.BUCKET, user.username, path)
+        return Response(data, status=status.HTTP_201_CREATED)
 
 class FileDetail(APIView):
     """
-    Retrieve, update or delete a file instance.
+    Download or delete a file instance.
     """
-    def get_object(self, pk):
-        try:
-            return File.objects.get(pk=pk)
-        except File.DoesNotExist:
-            raise Http404
 
-    def get(self, request, pk, format=None):
-        file = self.get_object(pk)
-        serializer = FileSerializer(file)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, path="/", format=None):
+        # download file from s3
+        file = 'media/'+path.split('/')[-1]
+        user = request.user
+        s3_interface.download_file(s3_interface.BUCKET, user.username, file, path)
+        # TODO error
+        return Response({'file': file})
 
-    def put(self, request, pk, format=None):
-        file = self.get_object(pk)
-        serializer = FileSerializer(file, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, path="/", format=None):
+        user = request.user
+        result = s3_interface.delete_path(s3_interface.BUCKET, user.username, path)
+        return Response(result)
 
-    def delete(self, request, pk, format=None):
-        file = self.get_object(pk)
-        file.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class FileCopyMove(APIView):
+    """
+    Download or delete a file instance.
+    """
+    #TODO is folder move, copy well?
+    # move
+    def post(self, request, old_path, new_path, format=None):
+        user = request.user
+        if request.data.get('method') == 'mv':
+            s3_interface.move_file(s3_interface.BUCKET, user.username, old_path, new_path)
+        elif request.data.get('method') == 'cp':
+            s3_interface.copy_file(s3_interface.BUCKET, user.username, old_path, new_path)
+        else:
+            return Response({'stats': 'bad_request'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'old_path': old_path, 'new_path': new_path})
+
 
