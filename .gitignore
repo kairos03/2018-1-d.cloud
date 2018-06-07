@@ -108,3 +108,6 @@ ENV/
 
 # aws configutation file
 aws_conf.py
+
+# media file
+**/media/*
