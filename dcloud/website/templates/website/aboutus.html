@@ -17,12 +17,7 @@
 			<h1 class="text-center">D.cloud를 소개합니다.</h1>
 			<p class="text-center">D.cloud는 클라우드 사이트입니다.</p>
 			<br>
-				{% if user.is_authenticated %}
-	               <p class="text-center"><a class= "btn btn-primary btn-lg" href="{% url 'file_list' %}" role ="button">내 클라우드로 가기</a></p>
-	            {% else %}
-                   <p class="text-center"><a class= "btn btn-primary btn-lg" href="{% url 'login' %}" role ="button">내 클라우드로 가기</a></p>
-                {% endif %}
-			
+			<p class="text-center"><a class= "btn btn-primary btn-lg" href="#" role ="button">내 클라우드로 가기</a></p>
 		</div>
 	</div>
 {% endblock %}
