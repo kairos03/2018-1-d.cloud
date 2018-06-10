@@ -27,4 +27,24 @@ def list_path(bucket, user, path):
 
     return {'files':files}
 
-# print(list_path(BUCKET, 'test1', ''))
+def upload_file(bucket, user, local_path, key):
+    return S3.upload_file(local_path, bucket, user+"/"+key)
+
+def download_file(bucket, user, local_path, key):
+    return S3.download_file(bucket, user+"/"+key, local_path)
+
+def delete_path(bucket, user, path):
+    return S3.delete_object(Bucket=bucket, Key=user+"/"+path)
+
+def make_directory(bucket, user, path):
+    return S3.put_object(Bucket=BUCKET, Key=user+"/"+path)
+
+#
+def move_file(bucket, user, old_path, new_path):
+    S3.copy_object(Bucket=bucket, CopySource=bucket+"/"+user+"/"+old_path, Key=user+"/"+new_path)
+    S3.delete_object(Bucket=bucket, Key=user+"/"+old_path)
+    return
+
+def copy_file(bucket, user, old_path, new_path):
+    S3.copy_object(Bucket=bucket, CopySource=bucket+"/"+user+"/"+old_path, Key=user+"/"+new_path)
+    return
