@@ -12,6 +12,6 @@ def home(request):
 
 @login_required
 def file_list(request):
-    files = requests.get('http://localhost:8000/restapi/list/')
-    print(files)
+    cookies = {'sessionid' : request.session.session_key}
+    files = requests.get('http://localhost:8000/restapi/list/', cookies=cookies)
     return render(request, 'website/file_list.html', files.json())

@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 from restful import s3_interface
 
 from restful.models import File  
@@ -12,6 +15,8 @@ class FileList(APIView):
     """
     List all file, or create a new snippet.
     """
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     """
     list files or view detail
@@ -53,6 +58,8 @@ class FileDetail(APIView):
     """
     Download or delete a file instance.
     """
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, path="/", format=None):
         # download file from s3
