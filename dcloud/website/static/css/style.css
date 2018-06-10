@@ -59,7 +59,9 @@ body {
 .navbar-default .navbar-nav > li > a:focus {
 	color:#4886DB;
 }
-
+.navbar-default .navbar-nav > li {
+	color:#EDE9F3;
+}
 .navbar-default .navbar-nav > li > a {
 	color:#EDE9F3;
 }
