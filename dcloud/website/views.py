@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect, Http404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView
-from website.forms import S3DirectUploadForm
 from restful.models import File
 import requests
 
