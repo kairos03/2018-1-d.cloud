@@ -19,7 +19,7 @@ def list_path(bucket, user, path):
     common_prefixes = objects.get('CommonPrefixes')
     if common_prefixes:
         for obj in common_prefixes:
-            files.append({'type':'diretory', 'name':obj.get('Prefix').split('/')[-2]})
+            files.append({'type':'directory', 'name':obj.get('Prefix').split('/')[-2]})
 
     # get files
     contents = objects.get('Contents')

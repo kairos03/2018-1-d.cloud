@@ -15,3 +15,13 @@ def file_list(request):
     cookies = {'sessionid' : request.session.session_key}
     files = requests.get('http://localhost:8000/restapi/list/', cookies=cookies)
     return render(request, 'website/file_list.html', files.json())
+
+def file_upload(request):
+	cookies = {'sessionid' : request.session.session_key}
+	requests.post('http://localhost:8000/restapi/list/',request, cookies=cookies)
+	return redirect('file_list')
+	
+def make_folder(request):
+	cookies = {'sessionid' : request.session.session_key}
+	files = requests.put('http://localhost:8000/restapi/list/', cookies=cookies)
+	return redirect('file_list')

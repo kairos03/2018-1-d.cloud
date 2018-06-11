@@ -1,8 +1,77 @@
 {% extends 'website/baseline.html' %}
-
+	
 {% block content %}
-    {% for file in files %}
-        <h1>{{file.name}}</h1>
-        <p>{{file.type}}</p>
-    {% endfor %}
+	<style type="text/css">
+
+	</style>
+<center>
+	<div>
+		<form method="post", action="{% url 'file_upload' %}" >
+			{% csrf_token %}
+			<div style="border: solid; display:inline-block; padding: 5px; border-color: skyblue" >
+				<input type="file">
+			</div>
+				<button style="margin-top: 10px" class="ui primary button" type="submit"><i class="upload icon"></i>업로드</button>
+		</form>
+	</div>
+</center>
+
+<button class="ui primary button" style="margin-left: 24%" type="submit" onclick="make_folder()"><i class="plus icon"></i>폴더 만들기</button>
+<br>
+<center>
+	<table style="margin-top: 7px" class="ui celled striped collapsing table">
+	  <thead>
+	    <tr><th class="twelve wide">/{{ user.username }}/</th>
+	    	 <th>복사</th>
+	    	  <th >이동</th>
+	    	   <th>삭제</th>
+	    	   <th >다운로드</th>
+	  </tr></thead>
+	  <tbody>
+	  	{% for file in files %}
+		   <tr>
+		      <td class="collapsing">
+		      	{% if file.type == "directory" %}
+		        	<a href="#"><i class="folder icon"></i> {{file.name}}</a>
+		        {% else %}
+		        	<i class="file outline icon"></i> {{file.name}}
+		        {% endif %}
+		      </td>
+		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="copy outline icon"></i></td>
+		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="sign out alternate icon"></i></td>
+		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="trash alternate outline icon"></i></td>
+		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="download icon"></i></td>
+		    </tr>
+	    {% endfor %} 
+	</table>
+</center>
+
+    <script type="text/javascript">
+    	function uploadChange(file) {
+		  var el = file.parentNode.parentNode.getElementsByTagName("*");
+		  for (var i = 0; i < el.length; i++) {
+		    var node = el[i];
+		    if (node.className == "file-text") {
+		      node.innerHTML = file.value;
+		      break;
+		    }
+		  }
+		}
+		function make_folder(){
+			location.href = "/make_folder/";
+		}
+
+		function copy(){
+
+		}
+		function move(){
+
+		}
+		function delete(){
+
+		}
+		function download(){
+
+		}
+    </script>
 {% endblock %}

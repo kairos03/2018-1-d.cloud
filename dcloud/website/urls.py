@@ -11,4 +11,7 @@ urlpatterns = [
     # blog
     url(r'^$', views.home),
     url(r'^files/', views.file_list, name='file_list'),
+    url(r'^upload/', views.file_upload, name='file_upload'),
+    url(r'^make_folder/', views.make_folder, name='make_folder'),
+
 ]
