@@ -6,22 +6,23 @@
 	</style>
 <center>
 	<div>
-		<form method="post", action="{% url 'file_upload' %}" >
+		<form method="post", enctype="multipart/form-data", action="{% url 'file_upload' path=path %}" >
 			{% csrf_token %}
 			<div style="border: solid; display:inline-block; padding: 5px; border-color: skyblue" >
-				<input type="file">
+				<input type="file" name="file">
 			</div>
 				<button style="margin-top: 10px" class="ui primary button" type="submit"><i class="upload icon"></i>업로드</button>
 		</form>
 	</div>
 </center>
 
-<button class="ui primary button" style="margin-left: 24%" type="submit" onclick="make_folder()"><i class="plus icon"></i>폴더 만들기</button>
+<button class="ui primary button" style="margin-left: 28%" type="submit" onclick="make_folder()"><i class="plus icon"></i>폴더 만들기</button>
 <br>
 <center>
 	<table style="margin-top: 7px" class="ui celled striped collapsing table">
 	  <thead>
-	    <tr><th class="twelve wide">/{{ user.username }}/</th>
+
+	    <tr><th class="twelve wide">/{{ path }}</th>
 	    	 <th>복사</th>
 	    	  <th >이동</th>
 	    	   <th>삭제</th>
@@ -32,7 +33,9 @@
 		   <tr>
 		      <td class="collapsing">
 		      	{% if file.type == "directory" %}
-		        	<a href="#"><i class="folder icon"></i> {{file.name}}</a>
+		      		{% with new_path=path|add:file.name|add:'/' %}
+		        	<a href="{% url 'file_list' path=new_path %}"><i class="folder icon"></i> {{file.name}}</a>
+		        	{% endwith %}
 		        {% else %}
 		        	<i class="file outline icon"></i> {{file.name}}
 		        {% endif %}
@@ -42,7 +45,8 @@
 		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="trash alternate outline icon"></i></td>
 		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="download icon"></i></td>
 		    </tr>
-	    {% endfor %} 
+	    {% endfor %}
+	</tbody>
 	</table>
 </center>
 
