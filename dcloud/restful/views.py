@@ -78,6 +78,10 @@ class FileCopyMove(APIView):
     """
     Download or delete a file instance.
     """
+
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     #TODO is folder move, copy well?
     # move
     def post(self, request, old_path, new_path, format=None):

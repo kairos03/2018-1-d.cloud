@@ -77,3 +77,28 @@ def file_view(request, path):
 			response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
 			return response
 	raise Http404
+
+@login_required
+def file_copy(request, old_path, new_path):
+	cookies = {'sessionid' : request.session.session_key}
+	cookies['csrftoken'] = csrf.get_token(request)
+	headers = {'X-CSRFToken': cookies['csrftoken']}
+	files = requests.post('http://localhost:8000/restapi/file-mod/'+old_path+'&'+new_path, data={'method': 'cp'}, headers=headers, cookies=cookies)
+	print(files.json())
+	new_path = "/".join(new_path.split("/")[:-1])
+	if new_path != '':
+		new_path = new_path+'/'
+	return redirect('file_list', path=new_path)
+	
+@login_required
+def file_move(request, old_path, new_path):
+	cookies = {'sessionid' : request.session.session_key}
+	cookies['csrftoken'] = csrf.get_token(request)
+	headers = {'X-CSRFToken': cookies['csrftoken']}
+	files = requests.post('http://localhost:8000/restapi/file-mod/'+old_path+'&'+new_path, data={'method': 'mv'}, headers=headers, cookies=cookies)
+	print(files.json())
+	new_path = "/".join(new_path.split("/")[:-1])
+	if new_path != '':
+		new_path = new_path+'/'
+	return redirect('file_list', path=new_path)
+	
