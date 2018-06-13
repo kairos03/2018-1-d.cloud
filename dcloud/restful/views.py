@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+import os
 from restful import s3_interface
 
 from restful.models import File  
@@ -39,6 +39,8 @@ class FileList(APIView):
             file_path = '.' + file_serializer.data.get('file')
             user = request.user
             data = s3_interface.upload_file(s3_interface.BUCKET, user.username, file_path, path+file_path.split('/')[-1])
+            if os.path.exists(file_path):
+                os.remove(file_path)
             # TODO upload check
             # TODO remove local file
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
@@ -66,6 +68,8 @@ class FileDetail(APIView):
         file = 'media/'+path.split('/')[-1]
         user = request.user
         s3_interface.download_file(s3_interface.BUCKET, user.username, file, path)
+        if os.path.exists(file):
+            os.remove(file)
         # TODO error
         return Response({'file': file})
 
