@@ -68,8 +68,6 @@ class FileDetail(APIView):
         file = 'media/'+path.split('/')[-1]
         user = request.user
         s3_interface.download_file(s3_interface.BUCKET, user.username, file, path)
-        if os.path.exists(file):
-            os.remove(file)
         # TODO error
         return Response({'file': file})
 
