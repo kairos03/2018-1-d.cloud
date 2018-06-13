@@ -36,7 +36,6 @@ def make_folder(request, path):
 	cookies = {'sessionid' : request.session.session_key}
 	cookies['csrftoken'] = csrf.get_token(request)
 	headers = {'X-CSRFToken': cookies['csrftoken']}
-	print(path)
 	files = requests.put('http://localhost:8000/restapi/list/'+path, headers=headers, cookies=cookies)
 	return redirect('file_list', path=path)
 
