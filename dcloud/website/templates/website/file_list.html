@@ -53,7 +53,7 @@
 		      </td>
 		      <td class="center aligned collapsing"><i onclick="make_folder()" style="cursor: pointer;" class="sign out alternate icon"></i></td>
 		      <td class="center aligned collapsing">
-		      	{% with new_path=path|add:file.name|add:'/' %}
+		      	{% with new_path=path|add:file.name %}
 		        	<a href="{% url 'file_delete' path=new_path %}"><i class="trash alternate outline icon"></i></a>
 		        {% endwith %}
 		    </td>

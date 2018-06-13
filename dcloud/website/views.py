@@ -30,7 +30,8 @@ def file_upload(request, path):
 	headers = {'X-CSRFToken': cookies['csrftoken']}
 	requests.post('http://localhost:8000/restapi/list/'+path, files={'file': file}, headers=headers, cookies=cookies)
 	return redirect('file_list', path=path)
-	
+
+@login_required
 def make_folder(request, path):
 	dir_name = request.POST.get('dir_name')
 	cookies = {'sessionid' : request.session.session_key}
@@ -39,6 +40,7 @@ def make_folder(request, path):
 	files = requests.put('http://localhost:8000/restapi/list/'+path, headers=headers, cookies=cookies)
 	return redirect('file_list', path=path)
 
+@login_required
 def file_delete(request, path):
 	cookies = {'sessionid' : request.session.session_key}
 	cookies['csrftoken'] = csrf.get_token(request)
@@ -46,6 +48,7 @@ def file_delete(request, path):
 	requests.delete('http://localhost:8000/restapi/file/'+path, headers=headers, cookies=cookies)
 	return redirect('file_list', path="/".join(path.split("/")[:-2]))
 
+@login_required
 def file_download(request, path):
 	cookies = {'sessionid' : request.session.session_key}
 	requests.get('http://localhost:8000/restapi/file/'+path, cookies=cookies)
