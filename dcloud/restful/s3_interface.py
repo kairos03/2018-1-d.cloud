@@ -30,7 +30,7 @@ def list_path(bucket, user, path):
                 files.append({'type':'file', 'name':file})
 
     return {'files':files}
-
+ 
 
 def upload_file(bucket, user, local_path, key):
     return S3.upload_file(local_path, bucket, user+"/"+key)

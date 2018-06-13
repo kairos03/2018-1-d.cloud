@@ -6,8 +6,10 @@ from restful.models import File
 from django.views import View
 from django.core.files.base import ContentFile
 from django.middleware import csrf
+from dcloud import settings
+from django.http import HttpResponse
+import os
 import requests
-
 
 
 def home(request):
@@ -29,6 +31,7 @@ def file_upload(request, path):
 	cookies['csrftoken'] = csrf.get_token(request)
 	headers = {'X-CSRFToken': cookies['csrftoken']}
 	requests.post('http://localhost:8000/restapi/list/'+path, files={'file': file}, headers=headers, cookies=cookies)
+	# TODO delete mdeia/file
 	return redirect('file_list', path=path)
 
 @login_required
@@ -46,10 +49,31 @@ def file_delete(request, path):
 	cookies['csrftoken'] = csrf.get_token(request)
 	headers = {'X-CSRFToken': cookies['csrftoken']}
 	requests.delete('http://localhost:8000/restapi/file/'+path, headers=headers, cookies=cookies)
-	return redirect('file_list', path="/".join(path.split("/")[:-2]))
+	new_path = "/".join(path.split("/")[:-1])
+	if new_path != '':
+		new_path = new_path+'/'
+	return redirect('file_list', path=new_path)
 
 @login_required
 def file_download(request, path):
 	cookies = {'sessionid' : request.session.session_key}
 	requests.get('http://localhost:8000/restapi/file/'+path, cookies=cookies)
-	return redirect('file_list', path="/".join(path.split("/")[:-2]))
+	file_path = os.path.join(settings.MEDIA_ROOT, path)
+	if os.path.exists(file_path):
+		with open(file_path, 'rb') as fh:
+			response = HttpResponse(fh.read(), content_type='multipart/form-data' )
+			response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+			return response
+	raise Http404
+
+@login_required
+def file_view(request, path):
+	cookies = {'sessionid' : request.session.session_key}
+	requests.get('http://localhost:8000/restapi/file/'+path, cookies=cookies)
+	file_path = os.path.join(settings.MEDIA_ROOT, path)
+	if os.path.exists(file_path):
+		with open(file_path, 'rb') as fh:
+			response = HttpResponse(fh.read(), content_type='text/plain' )
+			response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+			return response
+	raise Http404

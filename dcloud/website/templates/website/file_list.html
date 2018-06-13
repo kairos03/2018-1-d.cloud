@@ -57,7 +57,11 @@
 		        	<a href="{% url 'file_delete' path=new_path %}"><i class="trash alternate outline icon"></i></a>
 		        {% endwith %}
 		    </td>
-		      <td class="center aligned collapsing"><i  style="cursor: pointer;" class="download icon"></i></td>
+					<td class="center aligned collapsing">
+						{% with new_path=path|add:file.name %}
+							<a href="{% url 'file_download' path=new_path %}"><i  style="cursor: pointer;" class="download icon"></i></a>
+						{% endwith %}
+					</td>
 		    </tr>
 	    {% endfor %}
 	</tbody>
