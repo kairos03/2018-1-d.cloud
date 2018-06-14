@@ -1,0 +1,23 @@
+{% extends 'website/baseline.html' %}
+{% load staticfiles %}
+
+{% block content %}
+	<style type="text/css">
+		.jumbotron{
+			background-image: url('{% static "images/cloudco.jpg"%}');
+			background-size: cover;
+			background : contain;
+			text-shadow: black 0.2em 0.2em 0.2em;
+			color : white;
+			height: 550px;
+		}
+	</style>
+    <div class="container">
+		<div class="jumbotron">
+			<h1 class="text-center">D.cloud를 소개합니다.</h1>
+			<p class="text-center">D.cloud는 클라우드 사이트입니다.</p>
+			<br>
+			<p class="text-center"><a class= "btn btn-primary btn-lg" href="#" role ="button">내 클라우드로 가기</a></p>
+		</div>
+	</div>
+{% endblock %}
