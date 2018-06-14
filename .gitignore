@@ -105,3 +105,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# aws configutation file
+aws_conf.py
+
+# media file
+**/media/*

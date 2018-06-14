@@ -1,0 +1,145 @@
+{% extends 'website/baseline.html' %}
+	
+{% block content %}
+	<style type="text/css">
+
+	</style>
+<center>
+	<div>
+		<form method="post", enctype="multipart/form-data", action="{% url 'file_upload' path=path %}" >
+			{% csrf_token %}
+			<div style="border: solid; display:inline-block; padding: 5px; border-color: skyblue" >
+				<input type="file" name="file">
+			</div>
+				<button style="margin-top: 10px" class="ui primary button" type="submit"><i class="upload icon"></i>업로드</button>
+		</form>
+	</div>
+</center>
+<div>
+	<button class="ui primary button" style="margin-left: 24%" onclick="make_folder()"><i class="plus icon"></i>폴더 만들기</button>
+	<div style="display: none;" id="dir_make">
+			<input type="text" id="dir_name">
+			<button class="ui primary button" onclick="make_directory()">만들기</button>
+	</div>
+	
+</div>
+<br>
+<center>
+	<table style="margin-top: 7px" class="ui celled striped collapsing table">
+	  <thead>
+
+	    <tr><th class="nine wide">/{{ path }}</th>
+	    	<th class="center aligned">경로</th>
+	    	 <th class="center aligned">복사</th>
+	    	  <th class="center aligned">이동</th>
+	    	   <th class="collapsing">삭제</th>
+	    	   <th class="collapsing">다운로드</th>
+	  </tr></thead>
+	  <tbody>
+	  	{% if path != "" %}
+	  		<td>
+		        	<a onclick="go_parent()"><i class="folder icon"></i> ...</a>
+			</td>
+		{% endif %}
+
+		   <tr>
+		   		{% for file in files %}
+		      <td class="collapsing">
+		      	{% if file.type == "directory" %}
+		      		{% with new_path=path|add:file.name|add:'/' %}
+		        	<a href="{% url 'file_list' path=new_path %}" ><i class="folder icon"></i> {{file.name}}</a>
+		        	{% endwith %}
+		        {% else %}
+		        	{% with new_path=path|add:file.name %}
+		        	<a style="color: black" href="{% url 'file_view' path=new_path %}"><i class="file outline icon"></i> {{file.name}} </a>
+		        	{% endwith %}
+		        {% endif %}
+		      </td>
+		      <td>
+		      	    {% if file.type != "directory" %}
+		      		{% with old_path=path|add:file.name %}
+		      		<input placeholder="dir/test.txt" type="text" id="{{ old_path }}">
+		        	{% endwith %}
+		        	{% endif %}
+
+		      </td>
+		      <td class="collapsing">
+		      	<div>
+		      		{% if file.type != "directory" %}
+		      		{% with old_path=path|add:file.name %}
+		        	<a style="color: black" id= "copy_path" onclick="copy('{{ old_path }}')"><i class="copy outline icon"></i></a>
+		        	{% endwith %}
+		        	{% endif %}
+		        </div>
+		      </td>
+
+		      <td class="center aligned collapsing">
+		      		{% if file.type != "directory" %}
+		      		{% with old_path=path|add:file.name %}
+		      		<a style="color: black"  onclick="move('{{ old_path }}')"><i class="sign out alternate icon"></i></a>
+		      		{% endwith %}
+		      		{% endif %}
+		      </td>
+
+		        <td class="center aligned collapsing">
+		      		{% with new_path=path|add:file.name %}
+		        	<a  style="color: black" href="{% url 'file_delete' path=new_path %}"><i class="trash alternate outline icon"></i></a>
+		        	{% endwith %}
+		    	</td>
+
+				<td class="center aligned collapsing">
+					{% with new_path=path|add:file.name %}
+						<a  style="color: black" href="{% url 'file_download' path=new_path %}"><i class="download icon"></i></a>
+					{% endwith %}
+				</td>
+		    </tr>
+	    {% endfor %}
+	</tbody>
+	</table>
+</center>
+
+    <script type="text/javascript">
+    	function uploadChange(file) {
+		  var el = file.parentNode.parentNode.getElementsByTagName("*");
+		  for (var i = 0; i < el.length; i++) {
+		    var node = el[i];
+		    if (node.className == "file-text") {
+		      node.innerHTML = file.value;
+		      break;
+		    }
+		  }
+		}
+		function make_folder(){
+			document.getElementById("dir_make").style.display = "inline-block";
+		}
+
+		function make_directory(){
+
+			dir = document.getElementById("dir_name").value;
+			console.log(dir)
+			var dir_path = "{{ path }}";
+			new_path = dir_path + dir + '/';
+			location.href = "{% url 'make_folder' path='' %}" + new_path;
+		}
+		function go_parent(){
+			var dir_path = "{{ path }}";
+			var dir_arr = dir_path.split('/');
+			dir_arr.pop();
+			dir_arr.pop();
+			var new_path = dir_arr.join('/');
+			location.href = "{% url 'file_list' path='' %}" + new_path;
+		}
+
+		function copy(old){
+			var copy_path = document.getElementById(old).value;
+			location.href = "/copy/"+old+"&" + copy_path;
+		}
+
+		function move(old){
+			var move_path = document.getElementById(old).value;
+			location.href = "/move/"+old+"&" + move_path;
+	
+		}
+
+    </script>
+{% endblock %}
